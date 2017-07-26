@@ -4,8 +4,10 @@ case class Person(name: String, gender: String, dob: String)
 
 object Person {
 
-  def apply(s: String): Option[Person] = s.trim match {
-    case "" => None
+  private val person = """(.+),(.+),(.+)""".r
+
+  def apply(s: String): Option[Person] = s match {
+    case person(name, gender, dob) => Some(Person(name.trim, gender.trim, dob.trim))
     case _ => None
   }
 
