@@ -8,6 +8,7 @@ object Gender {
 
   def apply(s: String): Gender = s.trim.toLowerCase match {
     case "male" => Male
-    case _ => Female
+    case "female" => Female
+    case _ => throw new IllegalArgumentException(s"Failed to parse Gender from '$s'")
   }
 }

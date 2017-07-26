@@ -1,31 +1,42 @@
 package com.atpfury.ceo.domain
 
+import org.joda.time.LocalDate
 import org.scalatest.{Matchers, WordSpecLike}
 
 class PersonSpec extends WordSpecLike with Matchers {
 
   "apply" should {
 
-    "return some female person given a valid string" in {
-      val Some(person) = Person(" Gemma Lane, Female , 20/11/91 ")
+    "return a female person given a valid string" in {
+      val person = Person(" Gemma Lane, Female , 20/11/91 ")
       person.name shouldBe "Gemma Lane"
       person.gender shouldBe Female
-      person.dob shouldBe "20/11/91"
+      person.dateOfBirth shouldBe new LocalDate(1991, 11, 20)
     }
 
-    "return some male person given a valid string" in {
-      val Some(person) = Person("Bill McKnight, Male, 16/03/77")
+    "return a male person given a valid string" in {
+      val person = Person("Bill McKnight, male, 16/03/77")
       person.name shouldBe "Bill McKnight"
       person.gender shouldBe Male
-      person.dob shouldBe "16/03/77"
+      person.dateOfBirth shouldBe new LocalDate(1977, 3, 16)
     }
 
-    "return None when given an empty string" in {
-      Person("") shouldBe None
+    "throw an exception when the date of birth cannot be parsed" in {
+      an[IllegalArgumentException] shouldBe thrownBy {
+        Person("some name,female,blah")
+      }
     }
 
-    "return None when given a white space only string" in {
-      Person("  ") shouldBe None
+    "throw an exception when given an empty string" in {
+      an[IllegalArgumentException] shouldBe thrownBy {
+        Person("")
+      }
+    }
+
+    "throw an exception when given a white space only string" in {
+      an[IllegalArgumentException] shouldBe thrownBy {
+        Person("  ")
+      }
     }
   }
 }
