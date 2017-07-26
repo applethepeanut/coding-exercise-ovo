@@ -8,9 +8,13 @@ trait Search {
 
   val people: List[Person]
 
-  def numberOf(g: Gender) = (f: List[Person]) => f.count(_.gender == g)
+  def numberOf(g: Gender) = (l: List[Person]) => l.count(_.gender == g)
 
   def numberOfMen: Int = numberOf(Male)(people)
+
+  def oldestPerson: Option[Person] = people.sortWith { (a, b) =>
+    a.dateOfBirth.toDateTimeAtCurrentTime.getMillis <= b.dateOfBirth.toDateTimeAtCurrentTime.getMillis
+  }.headOption
 }
 
 object Search extends Search {

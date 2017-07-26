@@ -21,6 +21,18 @@ class SearchSpec extends WordSpecLike with Matchers {
     }
   }
 
+  "oldestPerson" should {
+
+    "return the oldest person in the list" in new Setup {
+      search.oldestPerson shouldBe Some(Person("Wes Jackson", Male, new LocalDate(1974, 8, 14)))
+    }
+
+    "return the None if the list is empty" in new Setup {
+      override val allPeople = List.empty[Person]
+      search.oldestPerson shouldBe None
+    }
+  }
+
   "numberOfMen" should {
 
     "return the count of all men in the list" in new Setup {
