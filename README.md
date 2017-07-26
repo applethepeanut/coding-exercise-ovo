@@ -10,6 +10,10 @@ The application reads an AddressBook file and answers the following questions in
 2. Who is the oldest person in the address book?
 3. How many days older is Bill than Paul?
 
+### Decisions and assumptions
+
+I wanted to refrain from throwing exceptions in the creation of a Person, so the ```apply``` def returns an optional Person.
+
 ## Testing
 
 Run SBT test:
