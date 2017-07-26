@@ -10,7 +10,7 @@ trait Search {
 
   def numberOf(g: Gender) = (f: List[Person]) => f.count(_.gender == g)
 
-  val numberOfMen: Int = numberOf(Male)(people)
+  def numberOfMen: Int = numberOf(Male)(people)
 }
 
 object Search extends Search {
