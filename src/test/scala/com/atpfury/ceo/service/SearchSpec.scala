@@ -23,6 +23,13 @@ class SearchSpec extends WordSpecLike with Matchers {
 
   "ageDifference" should {
 
+    "return 0 when 2 people are of the same age" in new Setup {
+      val a = Person("C D", Male, new LocalDate(2000, 2, 5))
+      val b = Person("A B", Male, new LocalDate(2000, 2, 5))
+
+      search.ageDifference(a, b) shouldBe 0
+    }
+
     "return the age difference between 2 people" in new Setup {
       val bill = Person("Bill McKnight", Male, new LocalDate(1977, 2, 3))
       val paul = Person("Paul Robinson", Male, new LocalDate(1985, 1, 15))
