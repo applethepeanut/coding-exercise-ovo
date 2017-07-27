@@ -3,7 +3,9 @@ package com.atpfury.ceo.domain
 import org.joda.time.LocalDate
 import org.joda.time.format.DateTimeFormat
 
-case class Person(name: String, gender: Gender, dateOfBirth: LocalDate)
+case class Person(name: String, gender: Gender, dateOfBirth: LocalDate) {
+  override def toString = name
+}
 
 object Person {
 
