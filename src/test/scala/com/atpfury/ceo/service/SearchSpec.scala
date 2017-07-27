@@ -9,7 +9,7 @@ class SearchSpec extends WordSpecLike with Matchers {
   trait Setup {
 
     val allPeople = List(
-      Person("Bill McKnight", Male, new LocalDate(1997, 2, 3)),
+      Person("Bill McKnight", Male, new LocalDate(1977, 2, 3)),
       Person("Paul Robinson", Male, new LocalDate(1985, 1, 15)),
       Person("Gemma Lane", Female, new LocalDate(1991, 11, 20)),
       Person("Sarah Stone", Female, new LocalDate(1980, 9, 20)),
@@ -24,9 +24,17 @@ class SearchSpec extends WordSpecLike with Matchers {
   "ageDifference" should {
 
     "return the age difference between 2 people" in new Setup {
-      val bill = Person("Bill McKnight", Male, new LocalDate(1997, 2, 3))
+      val bill = Person("Bill McKnight", Male, new LocalDate(1977, 2, 3))
       val paul = Person("Paul Robinson", Male, new LocalDate(1985, 1, 15))
-      search.ageDifference(bill, paul) shouldBe 0
+
+      search.ageDifference(bill, paul) shouldBe 2903
+    }
+
+    "return the age difference between 2 people as a negative number" in new Setup {
+      val a = Person("C D", Male, new LocalDate(2000, 2, 5))
+      val b = Person("A B", Male, new LocalDate(2000, 2, 3))
+
+      search.ageDifference(a, b) shouldBe -2
     }
   }
 
@@ -49,7 +57,7 @@ class SearchSpec extends WordSpecLike with Matchers {
     }
 
     "return 0 when there are no men" in new Setup {
-      override val allPeople = List(Person("Gemma Lane", Female, new LocalDate(1991, 11, 20)))
+      override val allPeople = List(Person("Some Lady", Female, new LocalDate(2000, 1, 1)))
       search.numberOfMen shouldBe 0
     }
 

@@ -2,7 +2,7 @@ package com.atpfury.ceo.service
 
 
 import com.atpfury.ceo.domain.{Female, Gender, Male, Person}
-import org.joda.time.LocalDate
+import org.joda.time.{Days, LocalDate}
 
 trait Search {
 
@@ -17,7 +17,7 @@ trait Search {
   }.headOption
 
   def ageDifference(a: Person, b: Person): Int = {
-    0
+    Days.daysBetween(a.dateOfBirth, b.dateOfBirth).getDays
   }
 }
 
