@@ -23,7 +23,7 @@ class PersonSpec extends WordSpecLike with Matchers {
     }
 
     "return a person with a single name given a valid string" in {
-      val person = Person("bob, male, 16/3/77")
+      val person = Person("bob,male,16/3/77")
       person.name shouldBe "bob"
       person.gender shouldBe Male
       person.dateOfBirth shouldBe new LocalDate(1977, 3, 16)

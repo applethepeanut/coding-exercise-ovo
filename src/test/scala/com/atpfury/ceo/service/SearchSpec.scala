@@ -8,16 +8,37 @@ class SearchSpec extends WordSpecLike with Matchers {
 
   trait Setup {
 
+    val oldest = Person("Oldest Guy", Male, new LocalDate(1904, 1, 1))
+    val lady = Person("A Lady", Female, new LocalDate(1988, 2, 9))
+
     val allPeople = List(
-      Person("Bill McKnight", Male, new LocalDate(1977, 2, 3)),
-      Person("Paul Robinson", Male, new LocalDate(1985, 1, 15)),
-      Person("Gemma Lane", Female, new LocalDate(1991, 11, 20)),
-      Person("Sarah Stone", Female, new LocalDate(1980, 9, 20)),
-      Person("Wes Jackson", Male, new LocalDate(1974, 8, 14))
+      Person("Some guy", Male, new LocalDate(1988, 4, 9)),
+      lady,
+      oldest
     )
 
     lazy val search = new Search {
       override val people = allPeople
+    }
+  }
+
+  "find" should {
+
+    "return a list of people who's name exactly match the given name" in new Setup {
+      override val allPeople = List(
+        Person("Jane", Female, new LocalDate(2000, 1, 1)),
+        Person("Steve", Male, new LocalDate(2000, 1, 1)),
+        Person("Jane", Female, new LocalDate(2000, 2, 2))
+      )
+
+      search.find("Jane") shouldBe List(
+        Person("Jane", Female, new LocalDate(2000, 1, 1)),
+        Person("Jane", Female, new LocalDate(2000, 2, 2))
+      )
+    }
+
+    "return an empty list when no people are found but he given name" in new Setup {
+      search.find("zzz") shouldBe empty
     }
   }
 
@@ -31,10 +52,10 @@ class SearchSpec extends WordSpecLike with Matchers {
     }
 
     "return the age difference between 2 people" in new Setup {
-      val bill = Person("Bill McKnight", Male, new LocalDate(1977, 2, 3))
-      val paul = Person("Paul Robinson", Male, new LocalDate(1985, 1, 15))
+      val a = Person("A", Male, new LocalDate(1977, 2, 3))
+      val b = Person("B", Female, new LocalDate(1977, 2, 15))
 
-      search.ageDifference(bill, paul) shouldBe 2903
+      search.ageDifference(a, b) shouldBe 12
     }
 
     "return the age difference between 2 people as a negative number" in new Setup {
@@ -48,7 +69,7 @@ class SearchSpec extends WordSpecLike with Matchers {
   "oldestPerson" should {
 
     "return the oldest person in the list" in new Setup {
-      search.oldestPerson shouldBe Some(Person("Wes Jackson", Male, new LocalDate(1974, 8, 14)))
+      search.oldestPerson shouldBe Some(oldest)
     }
 
     "return the None if the list is empty" in new Setup {
@@ -60,17 +81,30 @@ class SearchSpec extends WordSpecLike with Matchers {
   "numberOfMen" should {
 
     "return the count of all men in the list" in new Setup {
-      search.numberOfMen shouldBe 3
+      search.numberOfMen shouldBe 2
     }
 
     "return 0 when there are no men" in new Setup {
-      override val allPeople = List(Person("Some Lady", Female, new LocalDate(2000, 1, 1)))
+      override val allPeople = List(lady)
       search.numberOfMen shouldBe 0
     }
 
     "return 0 when there are no people" in new Setup {
       override val allPeople = List.empty[Person]
       search.numberOfMen shouldBe 0
+    }
+  }
+
+  "numberOfGender" should {
+
+    "return the number of men" in new Setup {
+      val menIn = search.numberOfGender(Male)
+      menIn(allPeople) shouldBe 2
+    }
+
+    "return the number of women" in new Setup {
+      val womenIn = search.numberOfGender(Female)
+      womenIn(allPeople) shouldBe 1
     }
   }
 

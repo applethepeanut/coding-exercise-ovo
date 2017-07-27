@@ -1,33 +1,29 @@
 package com.atpfury.ceo.service
 
 
-import com.atpfury.ceo.domain.{Female, Gender, Male, Person}
-import org.joda.time.{Days, LocalDate}
+import com.atpfury.ceo.domain.{Gender, Male, Person}
+import org.joda.time.Days
+
+import scala.io.Source
 
 trait Search {
 
   val people: List[Person]
 
-  def numberOf(g: Gender) = (l: List[Person]) => l.count(_.gender == g)
+  def numberOfGender(g: Gender) = (l: List[Person]) => l.count(_.gender == g)
 
-  def numberOfMen: Int = numberOf(Male)(people)
+  def numberOfMen: Int = numberOfGender(Male)(people)
 
   def oldestPerson: Option[Person] = people.sortWith { (a, b) =>
     a.dateOfBirth.toDateTimeAtCurrentTime.getMillis <= b.dateOfBirth.toDateTimeAtCurrentTime.getMillis
   }.headOption
 
-  def ageDifference(a: Person, b: Person): Int = {
-    Days.daysBetween(a.dateOfBirth, b.dateOfBirth).getDays
-  }
+  def ageDifference(a: Person, b: Person): Int = Days.daysBetween(a.dateOfBirth, b.dateOfBirth).getDays
+
+  def find(name: String): List[Person] = people.filter(_.name == name)
 }
 
 object Search extends Search {
 
-  override val people = List(
-    Person("Bill McKnight", Male, new LocalDate(1997, 2, 3)),
-    Person("Paul Robinson", Male, new LocalDate(1985, 1, 15)),
-    Person("Gemma Lane", Female, new LocalDate(1991, 11, 20)),
-    Person("Sarah Stone", Female, new LocalDate(1980, 9, 20)),
-    Person("Wes Jackson", Male, new LocalDate(1974, 8, 14))
-  )
+  override val people = Source.fromResource("AddressBook").getLines.map(Person(_)).toList
 }
