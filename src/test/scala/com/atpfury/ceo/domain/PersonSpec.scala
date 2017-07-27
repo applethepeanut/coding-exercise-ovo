@@ -1,6 +1,7 @@
 package com.atpfury.ceo.domain
 
 import org.joda.time.LocalDate
+import org.scalatest.prop.TableDrivenPropertyChecks._
 import org.scalatest.{Matchers, WordSpecLike}
 
 class PersonSpec extends WordSpecLike with Matchers {
@@ -21,9 +22,39 @@ class PersonSpec extends WordSpecLike with Matchers {
       person.dateOfBirth shouldBe new LocalDate(1977, 3, 16)
     }
 
-    "throw an exception when the date of birth cannot be parsed" in {
+    "return a person with a single name given a valid string" in {
+      val person = Person("bob, male, 16/3/77")
+      person.name shouldBe "bob"
+      person.gender shouldBe Male
+      person.dateOfBirth shouldBe new LocalDate(1977, 3, 16)
+    }
+
+    val invalidLines = Table(
+      "line",
+      "some name,female,0/12/1999",
+      "some name,female,12/0/1999",
+      "some name,female,/12/1999",
+      "some name,female,12//1999",
+      "some name,female,12/12/",
+      "some name,female,12/12",
+      "some name,female,/12/12",
+      "some name,female,44/12/1999",
+      "some name,female,12/44/1999"
+    )
+
+    forAll(invalidLines) { (line) =>
+
+      s"throw an exception when parsing an invalid date from the line '$line'" in {
+        an[IllegalArgumentException] shouldBe thrownBy {
+          Person(line)
+        }
+      }
+
+    }
+
+    "throw an exception when given an invalid gender" in {
       an[IllegalArgumentException] shouldBe thrownBy {
-        Person("some name,female,blah")
+        Person("some name, blah, 12/12/12")
       }
     }
 
