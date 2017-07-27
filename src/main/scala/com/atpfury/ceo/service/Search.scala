@@ -15,6 +15,10 @@ trait Search {
   def oldestPerson: Option[Person] = people.sortWith { (a, b) =>
     a.dateOfBirth.toDateTimeAtCurrentTime.getMillis <= b.dateOfBirth.toDateTimeAtCurrentTime.getMillis
   }.headOption
+
+  def ageDifference(a: Person, b: Person): Int = {
+    0
+  }
 }
 
 object Search extends Search {
