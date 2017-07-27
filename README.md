@@ -17,6 +17,7 @@ The application reads an AddressBook file and answers the following questions in
 2. To keep things simple and iterative, I treated a person's name as a single string rather than splitting it into first and last names and worrying about parsing for now.
 3. Regarding the oldest person, the result is an option in case the list is empty.
 4. Regarding the number of days one person is older than another required search functionality, so to keep things simple ```find```, only works with an exact match.
+5. Decided to use Joda in order to model and simplify date comparisons. I suspect that this topic was left open - I could have written some more complex logic to do the calculations, but as this was not explicitly requested, I didn't reinvent the wheel ;)
 
 ## Testing
 
